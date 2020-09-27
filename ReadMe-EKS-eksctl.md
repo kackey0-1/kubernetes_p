@@ -21,3 +21,12 @@ eksctl create cluster \
 --node-type t2.medium \
 --ssh-public-key eks_k-kakimoto
 ```
+
+## Deploy Sample App
+```
+vi examples/guestbook/frontend-service.yaml
+# type: NodePort     # comment-out
+# typt: LoadBalancer # comment-in
+
+kubectl apply -f examples/guestbook
+```

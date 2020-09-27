@@ -50,18 +50,30 @@ MasterもPodの集まり
 # Kubenetes HandsOn
 ## とりあえず触ってみる
 ### kubectlで操作するKubernetes Clusterをdocker-for-desktopに設定　
+```
 $ kubectl config use-context docker-for-desktop
+```
 ### 設定されているかの確認
+```
 $ kubectl config current-context
+```
 ### 動作確認
+```
 $ kubectl get pods --namespace=kube-system
+```
 ### docker-for-desktopでingressが使えるように下準備
 Ingressとは、Serviceの一つ上にロードバランサとして設置()
 [reference](https://kubernetes.github.io/ingress-nginx/deploy/)
+
+```
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/cloud/deploy.yaml
+```
 ### デプロイ
+```
 $ kubectl apply -f examples/guestbook/
+```
 ### ingressの有効化
+```
 $ cat << 'EOT' >./guestbook-ingress.yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -76,58 +88,102 @@ spec:
           serviceName: frontend
           servicePort: 80
 EOT
+```
 ### ingressのデプロイ
+```
 $ kubectl apply -f guestbook-ingress.yaml
+```
 ### ADDRESSがlocalhostになるまで待機
+```
 $ kubectl get ingress
+```
 ### deployment一覧
+```
 $ kubectl get deploy -o wide
+```
 ### Deployment詳細
+```
 $ kubectl describe deploy frontend
+```
 ### ReplicaSet一覧
+```
 $ kubectl get rs -o wide
+```
 ### ReplicaSet詳細
+```
 $ kubectl describe rs frontend-6cb7f8bd65
+```
 ### Pod一覧
+```
 $ kubectl get pod -o wide
+```
 ### Pod詳細
+```
 $ kubectl describe pod frontend-6cb7f8bd65-gjd29
+```
 ### Podのログ
+```
 $ kubectl logs frontend-6cb7f8bd65-gjd29
+```
 ### Service一覧
+```
 $ kubectl get svc -o wide
+```
 ### Service詳細
+```
 $ kubectl describe svc frontend
+```
 ### Ingress一覧
+```
 $ kubectl get ing
+```
 ### Ingress詳細
+```
 $ kubectl describe ing guestbook-ingress
+```
 ## スケールさせてみる
 ###  frontendのPodを2つに増やす
+```
 $ vi examples/guestbook/frontend-deployment.yaml
 line 10: replicas: 1 <- 2に変更
 $ kubectl apply -f examples/guestbook/frontend-deployment.yaml
+```
 ###  pod数の確認
+```
 $ kubectl get pod -o wide
+```
 ## 意図的にPodを削除
 ### 先ほど増えた2つ目のPodを削除
+```
 $ kubectl delete pod frontend-6cb7f8bd65-jsh8h
+```
 ### 新しいPodが生成されることを確認
+```
 $ kubectl get pod -o wide
+```
 ## Podの設定を変えてみる
 ### Podの変更が起こらないと履歴が記録されないため、試しにしようメモリを変更
+```
 $ vi examples/guestbook/frontend-deployment.yaml
 line23: memory: 100Mi <- 120Miに変更
 $ kubectl apply -f examples/guestbook/frontend-deployment.yaml
 $ kubectl get pod
+```
 ### 履歴をみる()
+```
 $ kubectl rollout history deployments frontend
+```
 ### Revision=2の詳細をみる
+```
 $ kubectl rollout history deployments frontend --revision=2
+```
 ### Revision=1にロールバックしてみる
+```
 $ kubectl rollout undo deployments frontend --to-revision=1
 $ kubectl rollout history deployments frontend
+```
 ## Masterの動き
+```
 $ kubectl get pod --namespace=kube-system -o wide
 NAME                                     READY   STATUS    RESTARTS   AGE
 coredns-5644d7b6d9-bnrhh                 1/1     Running   0          6h16m
@@ -139,5 +195,8 @@ kube-proxy-6shqr                         1/1     Running   0          6h16m
 kube-scheduler-docker-desktop            1/1     Running   0          6h15m
 storage-provisioner                      1/1     Running   0          6h15m
 vpnkit-controller                        1/1     Running   0          6h15m
+```
 ### guestbookアプリケーションを削除
+```
 $ kubectl delete -f examples/guestbook/
+```
