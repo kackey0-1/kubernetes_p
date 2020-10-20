@@ -79,14 +79,70 @@ curl helloworld-clusterip:8080
 ```
 
 ##### NodePort
-
+NodePortのServiceを使う利点は、ClusterIPでは不可能だった、クラスター外へのPodの公開をNodeIPとNodePort経由で可能
+問題点としては、NodeIP、NodePortを知る必要があるということ。Nodeも起動・停止によりIP/Portが入れ替わる必要がある。
+そのため、ロードバランサーをNodesの前に置きStatic IPとDNSを与えることでNodeIPを知る必要がなくなる。
+その機能を兼ね備えているのがServiceのLoadBalancerタイプ
 ```
+# helloworld PodをNodePortのServiceとしてクラスタ内部で公開
+kubectl expose pod helloworld --type NodePort --port 8080 --name helloworld-nodeport
+# Serviceをリストアップ
+kubectl get service
+# クラスター内にCurlコンテナのPodを作成しShell接続
+kubectl run --restart Never --image curlimages/curl:7.68.0 -it --rm curl sh
+# 'helloworld' NodePort ServiceへCurlでアクセステスト
+curl helloworld-nodeport:8080
+# Node IPとNodePortを取得する
+minicube service helloworld-nodeport --url
 ```
 
 ##### LoadBalancer
+クラウドプロバイダーのL4LBのDNSから、各ノードの特定ポートにRoutingしてPodにアクセスする。
+問題点として、
+1. 1つのServiceごとに1つのLBが作られてします(高コスト)
+2. L4のLBなのでTCI/IPまでしかわからず、L7のHTTPのホスト・パスでLB振り分けができない
+そのため、L7レベル(URLごとなど)のHTTPホスト・パスでLBの振り分けをするにはIngressを使う
 
 ```
+# helloworld PodをLoadBalancerのServiceとしてクラスタ内部で公開
+kubectl expose pod helloworld --type LoadBalancer --port 8080 --name helloworld-lb
+# Serviceをリストアップ
+kubectl get service -o wide
+# Cluster内にcurlコンテナのPodを作成しshell接続
+kubectl run --restart Never --image curlimages/curl:7.68.0 -it --rm curl
+# helloworld LoadBalancer serviceへcurlでアクセステスト
+curl helloworld-lb:8080
+# Cluster外のMacからNodeIPとNodePortを指定してCurlすると接続可能
+# -> k8sクラスターをクラウドで運用する場合は、このLoadBalancerのServiceにLBのPublicIPとDNSが与えられる。
+curl $(minikube service helloworld-lb --url)
 ```
+
+### Ingressとは
+1. Podをクラスター内外に公開するL7LB
+2. クラスター外部からURLのホスト・パスによるServiceへの振り分けができる
+```
+# Minikube Addonsをリストアップ
+minikube addons list
+# Ingress addonを追加
+minikube addons enable ingress
+# Ingress Controller Podをチェック
+kubectl get pods -n kube-system
+```
+
+ingressを作り、helloworld Podをすべてのパス`/`で公開
+```
+# Ingressをマニフェストから作成
+kubectl apply -f ingress.yaml
+# ingressリストアップ
+kubectl get ingress
+# ingress resourceの詳細表示
+kubectl describe ingress helloworld
+# ingress controller(ALB)のIPを取得
+kubectl get ingress | aws '{ print $4 }' | tail -1
+# Ingress経由で、helloworld-nodeport Serviceにアクセス
+curl $(kubectl get ingress | aws '{ print $4 }' | tail -1)
+```
+
 
 ## Kubernetes Storage
 - PVC(永続ボリューム)
