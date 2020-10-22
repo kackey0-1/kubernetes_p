@@ -65,6 +65,8 @@ Cluster IPのServiceを使う利点は、いつ消えるかわからないPod IP
 1. Podにアクセスする際に、Pod IPを知る必要がなくなる
 2. Podにアクセスする際に、ロードバランスしてくれる
 
+restart=Never にするのはDeploymentリソース作成を避けるため
+
 ```
 #  Helloworld PodをClusterIPのサービスとしてクラスタ内部で公開
 kubectl expose pod helloworld --type ClusterIP --port 8080 --name helloworld-clusterip
@@ -143,6 +145,31 @@ kubectl get ingress | aws '{ print $4 }' | tail -1
 curl $(kubectl get ingress | aws '{ print $4 }' | tail -1)
 ```
 
+ingress resourceに新しいパスを定義
+```
+# hello-app:2.0のPodを生成
+kubectl run --image gcr.io/google-samples/hello-app:2.0 --port 8080 --restart Never helloworld-v2
+# NodePort Service生成
+kubectl expose pod helloworld-v2 --type NodePort --port 8080 --name helloworld-v2-nodeport
+# new ingress 生成
+kubectl apply -f ingress_path.yaml
+
+```
+
+### ReplicaでPodをスケールアップ(冗長化)
+- ReplicaはPodを複製する
+- Specで定義されたReplica数を自動配置・維持(配備と冗長化)する
+
+```
+# PodをReplicaSetとして1つ起動
+kubectl apply -f replicaset.yaml
+# Replicasetをリストアップ
+kubectl get replicaset
+# 3つにスケールアップ
+kubectl scale --replicas=5 replicaset/helloworld
+# 1つPodを停止
+kubectl delete pod POD_ID
+```
 
 ## Kubernetes Storage
 - PVC(永続ボリューム)
