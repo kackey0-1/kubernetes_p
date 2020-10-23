@@ -180,10 +180,15 @@ kubectl delete -f replicaset.yaml
 
 ```
 # まずはPodをDeploymentとして1つ起動
-kubectl run --image gcr.io/google-samples/hello-app:1.0 helloworld
+kubectl create deployment helloworld --image gcr.io/google-samples/hello-app:1.0
 # Deploymentをリストアップ
-ubectl create deployment helloworld --image gcr.io/google-samples/hello-app:1.0
-
+kubectl get deployment
+# Deploymentをローリングアップデート
+kubectl set image deploy/helloworld helloworld=gcr.io/google-samples/hello-app:2.0
+# Rollout Historyチェック
+kubectl rollout history
+# 1つ前のバージョンにロールバック
+kubectl rollout undo deploy/helloworld
 # 5つにスケールアップ
 kubectl scale --replicas=5
 ```
