@@ -165,10 +165,27 @@ kubectl apply -f ingress_path.yaml
 kubectl apply -f replicaset.yaml
 # Replicasetをリストアップ
 kubectl get replicaset
-# 3つにスケールアップ
+# 5つにスケールアップ
 kubectl scale --replicas=5 replicaset/helloworld
-# 1つPodを停止
+# 1つPodを停止 -> 新しいPodが自動生成される
 kubectl delete pod POD_ID
+# Podの状況確認
+kubectl get pod,service,ingress -o wide
+# Clean UP
+kubectl delete -f replicaset.yaml
+```
+
+### Deployment
+- Deploymentは、Deploy時に新しいreplica setを作成し旧ReplicaSet管理下の旧Podを1つづつ減らしながら、新ReplicaSet下の新Podを増やし、段階的に置き換えていく。またロールバックも可能。
+
+```
+# まずはPodをDeploymentとして1つ起動
+kubectl run --image gcr.io/google-samples/hello-app:1.0 helloworld
+# Deploymentをリストアップ
+ubectl create deployment helloworld --image gcr.io/google-samples/hello-app:1.0
+
+# 5つにスケールアップ
+kubectl scale --replicas=5
 ```
 
 ## Kubernetes Storage
