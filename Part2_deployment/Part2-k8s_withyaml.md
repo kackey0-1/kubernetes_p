@@ -18,7 +18,31 @@ kubectl create deployment helloworld --image gcr.io/google-samples/hello-app:1.0
 ```
 
 ## Pod Yamlで複数コンテナを起動
-
 ```
 kubectl run --port 8080 --image busybox --restart Never --dry-run -o yaml --command helloworld -- /ben/sh -c sleep 500 > pod_multi_containers.yaml
+kubectl create deployment helloworld --image busybox --replicas 5 --dry-run=client -o yaml > deployment_multi_containers.yaml
+
+# delete created pods/deployments by yaml
+kubectl delete -f pod_multi_containers.yaml
+kubectl delete -f deployment_multi_containers.yaml
 ```
+
+### Pod/Deploymentマニフェストの比較
+Podの上に、Deploymentの定義(replica, rolling update strategy)が存在していることが大きな違い
+deploymentの配下にpodのspecsを定義
+Deployment: ReplicaSetの世代管理
+Replicaset: Podのレプリカを管理
+Pod: コンテナの集合体
+の順にオブジェクトが存在している
+
+## KubernetesのStorage
+### 環境変数をConfigMapで定義
+ConfigMapは環境変数などをKey-Valueとして保存するリソース
+マニフェストに直接環境変数を定義してもいいが、変数のreuseができないという問題が発生するためConfigMapを用意する
+
+```
+# create configmap
+kubectl create configmap my-config --from-literal=TEST_ENV=Hello_World --dry-run -o yaml > configmap.yaml
+```
+
+
