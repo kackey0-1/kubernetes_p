@@ -35,14 +35,5 @@ Replicaset: Podのレプリカを管理
 Pod: コンテナの集合体
 の順にオブジェクトが存在している
 
-## KubernetesのStorage
-### 環境変数をConfigMapで定義
-ConfigMapは環境変数などをKey-Valueとして保存するリソース
-マニフェストに直接環境変数を定義してもいいが、変数のreuseができないという問題が発生するためConfigMapを用意する
-
-```
-# create configmap
-kubectl create configmap my-config --from-literal=TEST_ENV=Hello_World --dry-run -o yaml > configmap.yaml
-```
 
 
