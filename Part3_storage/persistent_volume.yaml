@@ -6,6 +6,7 @@ spec:
   storageClassName: manual
   capacity:
     storage: 100M # Volumeサイズを100MB指定
-  accessModes: ReadWriteOnce
+  accessModes: 
+    - ReadWriteOnce
   hostPath: # Node上のパスを指定
     path: "/mnt/pvc"
