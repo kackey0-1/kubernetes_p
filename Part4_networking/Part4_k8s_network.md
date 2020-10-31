@@ -24,7 +24,6 @@ kubectl delete pod helloworld --namespace staging
 ### Overlay Mode(Kubernetes/Docker Swarm)
 複数ホストがある場合に使う
 
-
 ```bash
 # show network driver(bridge, host, null)
 docker network ls
@@ -32,6 +31,12 @@ docker network ls
 docker network create --driver bridge custom_bridge
 # delete network
 docker network rm custom_bridge
-
 ```
+
+## Overlay Networkとは？
+異なるホスト上のPodにアクセスするためには、各ホストでRoutingをする必要があるが、
+Overlay Networkを利用する事によりCluster側でRoute Tableを提供しよし何やってくれる。
+それを実現するために`CNI(Container Network Interface) Plugin`が提供されている。
+Example: Calico, Flan
+
 
