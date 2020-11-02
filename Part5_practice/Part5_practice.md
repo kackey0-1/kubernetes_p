@@ -47,3 +47,28 @@
 - Ingress ingress
   - /vote -> voting service of port 5000
   - /result -> result service of port 5001
+
+```bash
+# create deployment
+kubectl create deployment vote --image dockersamples/examplevotingapp_vote:before --dry-run -o yaml > vote_deployment.yaml
+kubectl create deployment result --image dockersamples/examplevotingapp_result:before --dry-run -o yaml > result_deployment.yaml
+kubectl create deployment db --image postgres:9.4 --dry-run -o yaml > db_deployment.yaml
+kubectl create deployment redis --image redis:alpine --dry-run -o yaml > redis_deployment.yaml
+# create service
+kubectl expose deployments.app/vote --type NodePort --port=5000 --target-port=80 --name=vote-nodeport --dry-run=client -o yaml > vote_service.yaml
+kubectl expose deployments.app/result --type NodePort --port=5001 --target-port=80 --name=result-nodeport --dry-run=client -o yaml > result_service.yaml
+kubectl expose deployments.app/db --type ClusterIP --port=5432 --target-port=5432 --name=result-nodeport --dry-run=client -o yaml > db_service.yaml
+kubectl expose deployments.app/db --type ClusterIP --port=6379 --target-port=6379 --name=result-nodeport --dry-run=client -o yaml > redis_service.yaml
+# create ingress
+
+# apply deployment
+kubectl apply -f vote_deployment.yaml 
+kubectl apply -f result_deployment.yaml
+kubectl apply -f db_deployment.yaml
+kubectl apply -f redis_deployment.yaml
+# apply service
+kubectl apply -f vote_service.yaml
+kubectl apply -f result_service.yaml
+kubectl apply -f db_service.yaml
+kubectl apply -f redis_service.yaml
+```
