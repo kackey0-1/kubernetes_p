@@ -3,22 +3,22 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    run: worker
-  name: worker
+    app: workers
+  name: workers
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: worker
+      app: workers
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        run: worker
+        app: workers
     spec:
       containers:
       - image: dockersamples/examplevotingapp_worker
-        name: worker
+        name: examplevotingapp-worker-pzg7d
         resources: {}
 status: {}

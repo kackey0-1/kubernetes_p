@@ -53,14 +53,14 @@
 kubectl create deployment vote --image dockersamples/examplevotingapp_vote:before --dry-run=client -o yaml > vote_deployment.yaml
 kubectl create deployment result --image dockersamples/examplevotingapp_result:before --dry-run=client -o yaml > result_deployment.yaml
 kubectl create deployment db --image postgres:9.4 --dry-run=client -o yaml > db_deployment.yaml
-kubectl create deployment redis --image redis:alpine --dry-=client -o yaml > redis_deployment.yaml
-kubectl create deployment worker --image dockersamples/examplevotingapp_worker --dry-run=client -o yaml > worker_deployment.yaml
+kubectl create deployment redis --image redis:alpine --dry-run=client -o yaml > redis_deployment.yaml
+kubectl create deployment workers --image dockersamples/examplevotingapp_worker --dry-run=client -o yaml > workers_deployment.yaml
 
 # create service
-kubectl expose deployments.app/vote --type NodePort --port=5000 --target-port=80 --name=vote-nodeport --dry-run=client -o yaml > vote_service.yaml
-kubectl expose deployments.app/result --type NodePort --port=5001 --target-port=80 --name=result-nodeport --dry-run=client -o yaml > result_service.yaml
-kubectl expose deployments.app/db --type ClusterIP --port=5432 --target-port=5432 --name=db-clusterip --dry-run=client -o yaml > db_service.yaml
-kubectl expose deployments.app/db --type ClusterIP --port=6379 --target-port=6379 --name=redis-clusterip --dry-run=client -o yaml > redis_service.yaml
+kubectl expose deployments.app/vote --type NodePort --port=5000 --target-port=80 --name=vote --dry-run=client -o yaml > vote_service.yaml
+kubectl expose deployments.app/result --type NodePort --port=5001 --target-port=80 --name=result --dry-run=client -o yaml > result_service.yaml
+kubectl expose deployments.app/db --type ClusterIP --port=5432 --target-port=5432 --name=db --dry-run=client -o yaml > db_service.yaml
+kubectl expose deployments.app/redis --type ClusterIP --port=6379 --target-port=6379 --name=redis --dry-run=client -o yaml > redis_service.yaml
 
 
 # apply deployment
@@ -68,7 +68,6 @@ kubectl apply -f vote_deployment.yaml
 kubectl apply -f result_deployment.yaml
 kubectl apply -f db_deployment.yaml
 kubectl apply -f redis_deployment.yaml
-kubectl apply -f worker_deployment.yaml
 # apply service
 kubectl apply -f vote_service.yaml
 kubectl apply -f result_service.yaml
@@ -78,6 +77,13 @@ kubectl apply -f redis_service.yaml
 kubectl apply -f ingress_vote.yaml
 kubectl apply -f ingress_result.yaml
 kubectl apply -f ingress.yaml
+# apply worker deployment
+kubectl apply -f workers_deployment.yaml
 
-
+# delete deployment
+kubectl delete --all deployments --namespace=default
+# delete service
+kubectl delete --all services --namespace=default
+# delete ingress
+kubectl delete --all ingress --namespace=default
 ```

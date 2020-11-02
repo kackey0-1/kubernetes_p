@@ -24,8 +24,8 @@ spec:
         - name: POSTGRES_PASSWORD
           value: postgres
         image: postgres:9.4
-        name: postgres
+        name: db
         ports:
-          - containerPort: 5432
+        - containerPort: 5432
         resources: {}
 status: {}

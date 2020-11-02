@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     app: vote
-  name: vote-nodeport
+  name: vote
 spec:
   ports:
   - port: 5000
