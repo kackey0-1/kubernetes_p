@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: workers
+  name: workers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workers
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: workers
+    spec:
+      containers:
+      - image: dockersamples/examplevotingapp_worker
+        name: examplevotingapp-worker-pzg7d
+        resources: {}
+status: {}
