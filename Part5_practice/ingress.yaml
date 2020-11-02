@@ -10,9 +10,9 @@ spec:
       paths:
       - path: /vote
         backend:
-          serviceName: vote
+          serviceName: vote-ingress
           servicePort: 5000
       - path: /result
         backend:
-          serviceName: result
+          serviceName: result-ingress
           servicePort: 5001
