@@ -22,7 +22,7 @@ ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa.`date '+%Y-%m-%d'` -C kentaro.a.kakim
 # - ユーザーが好きなだけ起動できる
 # - auto scaling group (ASG)でスケールアップ・ダウンできる
 # - ワーカーノードEC2のsecurity group
-# - ワーカーノードEC2のIAM role と instance profile
+# - ワーカーノードEC2のIAM Role と Instance Profile
 # AWS VPC:
 # - VPC
 # - ap-northeast-1 regionの3つのavailability zones (AZ) にPublicとPrivateのSubnets   
@@ -57,5 +57,15 @@ eksctl delete cluster \
 
 ```bash
 # Create Helm
+helm create test
+# Add Helm Repo 
+helm repo add stable https://charts.helm.sh/stable
+# Show Helm Repos
+helm repo list
+# Search stable resoures
+helm search repo stable
+# Update Helm Repo
+helm repo update
+# Search nginx in repo
 
 ```
