@@ -1,30 +1,39 @@
 # Exercises
-## Create a namespace called 'mynamespace' and a pod with image nginx called nginx on this namespace
+
+## Create a namespace called 'mynamespace' and a pod with image nginx called nginx on this namespace [O]
 ```bash
 kubectl create namespace mynamespace
 kubectl run nginx --image=nginx --restart=Never -n mynamespace
 ```
 
-## Create the pod that was just described using YAML
+## Create the pod that was just described using YAML [O]
 ```bash
 kubectl run nginx --image=nginx --restart=Never -n mynamespace --dry-run=client -o yaml > nginx_pod.yaml
 kubectl apply -f nginx_pod.yaml -n mynamespace
 ```
 
-## Create a busybox pod (using kubectl command) that runs the command "env". Run it and see the output
+## Create a busybox pod (using kubectl command) that runs the command "env". Run it and see the output [O]
 ```bash
 kubectl run busybox --image=busybox --restart=Never -n mynamespace --command -- env
 kubectl run busybox --image=busybox --restart=Never -n mynamespace --it env
 kubectl logs busybox -n mynamespace
 ```
 
-## Create a busybox pod (using YAML) that runs the command "env". Run it and see the output
+## Create a busybox pod (using YAML) that runs the command "env". Run it and see the output [X]
 ```bash
+kubectl run busybox --image=busybox --restart=Never -n mynamespace --dry-run=client -o yaml --command -- env > busybox_pod.yaml
+kubectl apply -f busybox_pod.yaml
+kubectl logs busybox -n mynamespace
 ```
 
-## Get the YAML for a new namespace called 'myns' without creating it
+## Get the YAML for a new namespace called 'myns' without creating it [O]
+```bash
+kubectl create namespace myns --dry-run=client -o yaml > myns_namespace.yaml
+```
 
 ## Get the YAML for a new ResourceQuota called 'myrq' with hard limits of 1 CPU, 1G memory and 2 pods without creating it
+```bash
+```
 
 ## Get pods on all namespaces
 
