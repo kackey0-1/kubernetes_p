@@ -34,7 +34,7 @@ eksctl create cluster \
     --version 1.16 \
     --region ap-northeast-1 \
     --nodegroup-name workers \
-    --node-type t3.medium \
+    --node-type t3.small \
     --nodes 1 \
     --nodes-min 1 \
     --nodes-max 2 \
@@ -66,6 +66,20 @@ helm repo list
 helm search repo stable
 # Update Helm Repo
 helm repo update
-# Search nginx in repo
+# Search nginx in repo　(このNginxはingress controller用)
+helm search repo nginx
+#　StandaloneのNginxは bitnami のリポジトリにある
+helm repo add bitnami https://charts.bitnami.com/bitnami
 
+## Install
+# Ex: helm install RELEASE_NAME_REPO_NAME
+helm install nginx bitnami/nginx
+
+## Upgrade
+# Upgrade after changing values in yaml
+helm upgrade nginx bitnami/nginx --dry-run
+# Upgrade using values in overrides.yaml
+helm upgrade nginx bitnami/nginx -f override.yaml
+# Rollback
+helm rollback nginx REVISION_NUMBER
 ```
