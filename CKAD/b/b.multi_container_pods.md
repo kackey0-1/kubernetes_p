@@ -1,0 +1,13 @@
+# Create a Pod with two containers, both with image busybox and command "echo hello; sleep 3600". Connect to the second container and run 'ls' [X]
+```bash
+kubectl run busybox --image=busybox --restart=Never --dry-run=client -o yaml --command -- /bin/sh "echo hello; sleep 3600" > multi-container_pod.yaml
+kubectl exec pod/busybox -c busybox2 -it /bin/sh
+ls
+exit
+```
+
+# Create pod with nginx container exposed at port 80. Add a busybox init container which downloads a page using "wget -O /work-dir/index.html http://neverssl.com/online". Make a volume of type emptyDir and mount it in both containers. For the nginx container, mount it on "/usr/share/nginx/html" and for the initcontainer, mount it on "/work-dir". When done, get the IP of the created pod and create a busybox pod and run "wget -O- IP" [X]
+```bash
+kubectl run nginx --image=nginx --port 80 --dry-run=client -o yaml > multi-nginx_pod.yaml
+
+```
