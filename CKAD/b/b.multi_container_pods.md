@@ -19,7 +19,7 @@ kubectl apply -f nginx-init.yaml
 kubectl apply -f not-wrong-nginx-init.yaml # Also OK
 kubectl get pod/nginx -o wide
 kubectl run busybox --image=busybox --restart=Never --rm -it wget -O- 172.17.0.4
-kubectl run box --image=busybox --restart=Never --rm -it -- /bin/sh -c "wget -O- IP"
+kubectl run box --image=busybox --restart=Never --rm -it -- /bin/sh -c "wget -O- 172.17.0.4"
 ```
 ```yaml
 apiVersion: v1
