@@ -2,17 +2,45 @@
 
 ## Create 3 pods with names nginx1,nginx2,nginx3. All of them should have the label app=v1
 ```bash
-kubectl run nginx1 --image=nginx --restart=Never --port 80 --dry-run=client -o yaml > nginx1.yaml
-kubectl run nginx2 --image=nginx --restart=Never --port 80 --dry-run=client -o yaml > nginx2.yaml
-kubectl run nginx3 --image=nginx --restart=Never --port 80 --dry-run=client -o yaml > nginx3.yaml
-# edit label name to app=v1 with vi editor
+# kubectl run nginx1 --image=nginx --restart=Never --port 80 --dry-run=client -o yaml > nginx1.yaml
+# kubectl run nginx2 --image=nginx --restart=Never --port 80 --dry-run=client -o yaml > nginx2.yaml
+# kubectl run nginx3 --image=nginx --restart=Never --port 80 --dry-run=client -o yaml > nginx3.yaml
+# # edit label name to app=v1 with vi editor
+# kubectl apply -f nginx1.yaml
+# kubectl apply -f nginx2.yaml
+# kubectl apply -f nginx3.yaml
+# kubectl delete pod --all
+
+kubectl run nginx1 --image=nginx --restart=Never --port 80 --labels=app=v1
+kubectl run nginx2 --image=nginx --restart=Never --port 80 --labels=app=v1
+kubectl run nginx3 --image=nginx --restart=Never --port 80 --labels=app=v1
 ```
 
 ## Show all labels of the pods
-Change the labels of pod 'nginx2' to be app=v2
-Get the label 'app' for the pods (show a column with APP labels)
-Get only the 'app=v2' pods
-Remove the 'app' label from the pods we created before
+```bash
+kubectl get pod --show-labels
+```
+
+## Change the labels of pod 'nginx2' to be app=v2 [O]
+```bash
+kubectl label --overwrite pods nginx2 "app=v2"
+```
+
+## Get the label 'app' for the pods (show a column with APP labels) [O]
+```bash
+kubectl get po -l app --show-labels
+```
+
+## Get only the 'app=v2' pods [O]
+```bash
+kubectl get po -l app=v2 --show-labels
+```
+
+## Remove the 'app' label from the pods we created before
+```bash
+kubectl label pods --all app-
+```
+
 Create a pod that will be deployed to a Node that has the label 'accelerator=nvidia-tesla-p100'
 Annotate pods nginx1, nginx2, nginx3 with "description='my description'" value
 Check the annotations for pod nginx1
