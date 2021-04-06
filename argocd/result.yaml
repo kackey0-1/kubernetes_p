@@ -28,7 +28,7 @@ spec:
         app: result
     spec:
       containers:
-      - image: dockersamples/examplevotingapp_result:before
+      - image: dockersamples/examplevotingapp_result:latest
         name: examplevotingapp-result-wp2km
         ports:
         - containerPort: 80
