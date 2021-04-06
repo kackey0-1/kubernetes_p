@@ -1,5 +1,5 @@
 
-[deploy sample app by kustomization.yaml](https://qiita.com/Kta-M/items/ce475c0063d3d3f36d5d#%E3%82%B5%E3%83%B3%E3%83%97%E3%83%AB%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4)
+[deploy microservice apps by kustomization.yaml](https://github.com/GoogleCloudPlatform/microservices-demo/blob/master/docs/development-guide.md)
 
 requirements
 
@@ -10,4 +10,12 @@ use kustomization.yaml)
   - use argo rollout
   - use db connection
   - use kustomization.yaml
-  
+ 
+```bash
+To launch Minikube (tested with Ubuntu Linux). Please, ensure that the local Kubernetes cluster has at least:
+
+4 CPUs
+4.0 GiB memory
+32 GB disk space
+minikube start --cpus=4 --memory 4096 --disk-size 32g
+``` 

@@ -1,0 +1,8 @@
+---
+
+configurations:
+  - rollout-transform.yaml
+
+resources:
+  - resources/frontend.yaml
+
