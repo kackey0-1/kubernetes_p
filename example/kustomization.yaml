@@ -9,5 +9,6 @@ resources:
   - resources/productcatalogservice.yaml
   - resources/cartservice.yaml
   - resources/recommendationservice.yaml
+  - resources/shippingservice.yaml
   - data/redis-cart.yaml
 
