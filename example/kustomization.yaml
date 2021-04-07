@@ -1,0 +1,12 @@
+---
+configurations:
+  - rollout-transform.yaml
+
+resources:
+  - ingress/nginx.yaml
+  - resources/frontend.yaml
+  - resources/currencyservice.yaml
+  - resources/productcatalogservice.yaml
+  - resources/cartservice.yaml
+  - data/redis-cart.yaml
+
