@@ -4,6 +4,7 @@ configurations:
 
 resources:
   - ingress/nginx.yaml
+  - resources/adservice.yaml
   - resources/frontend.yaml
   - resources/currencyservice.yaml
   - resources/productcatalogservice.yaml
