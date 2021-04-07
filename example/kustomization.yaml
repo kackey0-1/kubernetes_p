@@ -4,5 +4,6 @@ configurations:
   - rollout-transform.yaml
 
 resources:
+  - ingress/nginx.yaml
   - resources/frontend.yaml
 
