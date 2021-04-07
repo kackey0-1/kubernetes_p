@@ -8,6 +8,7 @@ resources:
   - resources/cartservice.yaml
   - resources/checkoutservice.yaml
   - resources/currencyservice.yaml
+  - resources/emailservice.yaml
   - resources/frontend.yaml
   - resources/loadgenerator.yaml
   - resources/productcatalogservice.yaml
