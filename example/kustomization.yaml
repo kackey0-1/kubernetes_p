@@ -8,5 +8,6 @@ resources:
   - resources/currencyservice.yaml
   - resources/productcatalogservice.yaml
   - resources/cartservice.yaml
+  - resources/recommendationservice.yaml
   - data/redis-cart.yaml
 
