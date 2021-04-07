@@ -11,5 +11,6 @@ resources:
   - resources/recommendationservice.yaml
   - resources/shippingservice.yaml
   - resources/checkoutservice.yaml
+  - resources/paymentservice.yaml
   - data/redis-cart.yaml
 
