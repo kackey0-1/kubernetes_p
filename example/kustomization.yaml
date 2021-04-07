@@ -5,13 +5,14 @@ configurations:
 resources:
   - ingress/nginx.yaml
   - resources/adservice.yaml
-  - resources/frontend.yaml
-  - resources/currencyservice.yaml
-  - resources/productcatalogservice.yaml
   - resources/cartservice.yaml
-  - resources/recommendationservice.yaml
-  - resources/shippingservice.yaml
   - resources/checkoutservice.yaml
+  - resources/currencyservice.yaml
+  - resources/frontend.yaml
+  - resources/loadgenerator.yaml
+  - resources/productcatalogservice.yaml
   - resources/paymentservice.yaml
+  - resources/recommendationservice.yaml
   - data/redis-cart.yaml
+  - resources/shippingservice.yaml
 
