@@ -1,0 +1,11 @@
+---
+configurations:
+  - rollout-transform.yaml
+
+resources:
+  - redis.yaml
+  - db.yaml
+  - vote.yaml
+  - result.yaml
+  - ingress.yaml
+  - worker.yaml
