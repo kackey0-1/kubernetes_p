@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  creationTimestamp: null
+  labels:
+    app: vote
+  name: vote
+spec:
+  replicas: 2
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 40
+      - pause: {duration: 10}
+      - setWeight: 60
+      - pause: {duration: 10}
+      - setWeight: 80
+      - pause: {duration: 10}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: vote
+  template:
+    metadata:
+      labels:
+        app: vote
+    spec:
+      containers:
+      - image: dockersamples/examplevotingapp_vote:latest
+        name: examplevotingapp-vote-rs58f
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: vote
+  name: vote
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: vote
+  type: NodePort
+status:
+  loadBalancer: {}

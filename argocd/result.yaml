@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  creationTimestamp: null
+  labels:
+    app: result
+  name: result
+spec:
+  replicas: 1
+  strategy:
+    canary:
+      steps:
+        - setWeight: 20
+        - pause: { }
+        - setWeight: 40
+        - pause: { duration: 10 }
+        - setWeight: 60
+        - pause: { duration: 10 }
+        - setWeight: 80
+        - pause: { duration: 10 }
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: result
+  template:
+    metadata:
+     labels:
+        app: result
+    spec:
+      containers:
+      - image: dockersamples/examplevotingapp_result:latest
+        name: examplevotingapp-result-wp2km
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: result
+  name: result
+spec:
+  ports:
+  - port: 5001
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: result
+  type: NodePort
+status:
+  loadBalancer: {}
