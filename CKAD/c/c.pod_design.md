@@ -38,30 +38,96 @@ kubectl get po -l app=v2 --show-labels
 
 ## Remove the 'app' label from the pods we created before
 ```bash
+# add label
+kubectl label pods --all app=v1
+# remove label
 kubectl label pods --all app-
 ```
 
-Create a pod that will be deployed to a Node that has the label 'accelerator=nvidia-tesla-p100'
-Annotate pods nginx1, nginx2, nginx3 with "description='my description'" value
+## Create a pod that will be deployed to a Node that has the label 'accelerator=nvidia-tesla-p100'
+```bash
+kubectl run nginx4 --image=nginx --labels=accelrator=nvvidia-tesla-p100 --restart=Never
+```
+
+## Annotate pods nginx1, nginx2, nginx3 with "description='my description'" value
+```bash
+kubectl annotate pods nginx1 nginx2 nginx3 description='my description'
+```
+
 Check the annotations for pod nginx1
-Remove the annotations for these three pods
-Remove these pods to have a clean state in your cluster
+```bash
+kubectl describe po nginx1 | grep -i annotation
+```
+
+## Remove the annotations for these three pods
+```bash
+kubectl annotate pods nginx1 nginx2 nginx3 description-
+# better way
+kubectl annotate po nginx{1..3} description-
+```
+
+## Remove these pods to have a clean state in your cluster
+```bash
+kubectl delete pods nginx1 nginx2 nginx3
+# better way
+kubectl delete po nginx{1..3}
+```
 
 # Deployment
 
-Create a deployment with image nginx:1.7.8, called nginx, having 2 replicas, defining port 80 as the port that this container exposes (don't create a service for this deployment)
+## Create a deployment with image nginx:1.18.0, called nginx, having 2 replicas, defining port 80 as the port that this container exposes 
+   (don't create a service for this deployment)
+```bash
+kubectl create deployment nginx --image=nginx:1.18.0 --replicas=2 --port=80 --output=yaml > deployment_nginx.yaml
+kubectl get po,deploy --show-labels
 
-View the YAML of this deployment
+# better way
+kubectl create deployment nginx --image=nginx:1.18.0 --replicas=2 --port=80 --output=yaml > deployment_nginx.yaml
+kubectl apply -f deployment_nginx.yaml
+```
 
-View the YAML of the replica set that was created by this deployment
+## View the YAML of this deployment
+```bash
+kubectl get deploy -o yaml > output_deployment.yaml
+```
 
-Get the YAML for one of the pods
+## View the YAML of the replica set that was created by this deployment
+```bash
+kubectl describe deploy nginx
+# or
+kubectl get rs -l app=nginx
+```
 
-Check how the deployment rollout is going
+## Get the YAML for one of the pods
+```bash
+kubectl get po -l app=nginx
+kubectl get po <pod_name> -o yaml
+```
 
-Update the nginx image to nginx:1.7.9
+## Check how the deployment rollout is going [NG]
+```bash
+kubectl describe deploy nginx | grep -i strategy
+# should be
+kubectl rollout status deploy nginx
+```
 
-Check the rollout history and confirm that the replicas are OK
+## Update the nginx image to nginx:1.19.0
+```bash
+#cat deployment_nginx_upgrade.yaml ## update nginx tag to 1.19.0
+#kubectl apply -f deployment_nginx_upgrade.yaml
+## to check
+#kubectl describe deploy nginx
+
+kubectl edit deploy nginx # change nginx tag
+# or 
+kubectl set image deploy nginx nginx=1.19.2
+```
+
+## Check the rollout history and confirm that the replicas are OK
+```bash
+kubectk rollout history deploy nginx -o yaml
+
+```
 
 Undo the latest rollout and verify that new pods have the old image (nginx:1.7.8)
 
