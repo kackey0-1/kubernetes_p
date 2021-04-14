@@ -126,52 +126,99 @@ kubectl set image deploy nginx nginx=1.19.2
 ## Check the rollout history and confirm that the replicas are OK
 ```bash
 kubectk rollout history deploy nginx -o yaml
-
+kubectl get po,rs
 ```
 
-Undo the latest rollout and verify that new pods have the old image (nginx:1.7.8)
+## Undo the latest rollout and verify that new pods have the old image (nginx:1.7.8)
+```bash
+kubectl rollout undo deploy nginx
+kubectl describe deploy nginx
+kubeclt describe rs nginx
+```
 
-Do an on purpose update of the deployment with a wrong image nginx:1.91
+## Do an on purpose update of the deployment with a wrong image nginx:1.91
+```bash
+# 1.18 -> 1.91
+kubectl edit deploy nginx 
+kubectl describe deploy nginx
+```
 
-Verify that something's wrong with the rollout
+## Verify that something's wrong with the rollout
+```bash
+kubectl rollout status deploy nginx
+```
 
-Return the deployment to the second revision (number 2) and verify the image is nginx:1.7.9
+## Return the deployment to the second revision (number 2) and verify the image is nginx:1.7.9
+```bash
+kubectl rollout undo deploy nginx --to-revision=2
+kubectl describe deploy nginx | grep -i image
+kubectl rollout status deploy nginx
+```
 
-Check the details of the fourth revision (number 4)
+## Check the details of the fourth revision (number 4)
+```bash
+kubectl describe rs nginx | egrep -i "revision|image"
+# or 
+kubectl rollout history deploy nginx 
+kubeclt rollout history deploy nginx --revision=4
+```
 
-Scale the deployment to 5 replicas
+## Scale the deployment to 5 replicas
+```bash
+kubectl scale --replicas=5 deploy nginx
+kubectl get po,rs,deploy
+```
 
-Autoscale the deployment, pods between 5 and 10, targetting CPU utilization at 80%
+## Autoscale the deployment, pods between 5 and 10, targetting CPU utilization at 80%
+```bash
+kubectl autoscale deploy nginx --min=5 --max=10 --cpu-percent=80
+kubectl describe deploy nginx
+```
 
-Pause the rollout of the deployment
+## Pause the rollout of the deployment
+```bash 
+kubectl rollout pause deploy nginx
+```
 
-Update the image to nginx:1.9.1 and check that there's nothing going on, since we paused the rollout
-Resume the rollout and check that the nginx:1.9.1 image has been applied
-Delete the deployment and the horizontal pod autoscaler you created
+## Update the image to nginx:1.19.1 and check that there's nothing going on, since we paused the rollout
+```bash
+kubectl edit deploy nginx
+kubectl describe deploy nginx
+kubectl rollout status deploy nginx
+kubectl rollout history deploy nginx
+```
+
+## Resume the rollout and check that the nginx:1.19.1 image has been applied
+```bash
+kubectl rollout resume deploy nginx
+
+kubectl rollout status deploy nginx 
+kubectl rollout history deploy nginx --revision=<number>
+
+kubectl get po,rs,deploy
+# rs_name=nginx-xxxxxxx
+kubectl describe rs/<rs_name>
+```
+
+## Delete the deployment and the horizontal pod autoscaler you created
+```bash
+kubectl delete deploy nginx
+kubectl api-resources
+kubectl delete horizontalpodautoscalers nginx
+```
 
 # Jobs
-Create a job named pi with image perl that runs the command with arguments "perl -Mbignum=bpi -wle 'print bpi(2000)'"
-
-Wait till it's done, get the output
-
-Create a job with the image busybox that executes the command 'echo hello;sleep 30;echo world'
-
-Follow the logs for the pod (you'll wait for 30 seconds)
-
-See the status of the job, describe it and see the logs
-
-Delete the job
-
-Create a job but ensure that it will be automatically terminated by kubernetes if it takes more than 30 seconds to execute
-
-Create the same job, make it run 5 times, one after the other. Verify its status and delete it
-
-Create the same job, but make it run 5 parallel times
+## Create a job named pi with image perl that runs the command with arguments "perl -Mbignum=bpi -wle 'print bpi(2000)'"
+## Wait till it's done, get the output
+## Create a job with the image busybox that executes the command 'echo hello;sleep 30;echo world'
+## Follow the logs for the pod (you'll wait for 30 seconds)
+## See the status of the job, describe it and see the logs
+## Delete the job
+## Create a job but ensure that it will be automatically terminated by kubernetes if it takes more than 30 seconds to execute
+## Create the same job, make it run 5 times, one after the other. Verify its status and delete it
+## Create the same job, but make it run 5 parallel times
 
 # Cron Job
 ## Create a cron job with image busybox that runs on a schedule of "*/1 * * * *" and writes 'date; echo Hello from the Kubernetes cluster' to standard output
-
 ## See its logs and delete it
-
 ## Create a cron job with image busybox that runs every minute and writes 'date; echo Hello from the Kubernetes cluster' to standard output. The cron job should be terminated if it takes more than 17 seconds to start execution after its schedule.
-
