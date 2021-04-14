@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: loadgenerator
+spec:
+  replicas: 1
+  strategy:
+    canary:
+      steps:
+        - setWeight: 20
+        - pause: { }
+        - setWeight: 40
+        - pause: { duration: 10 }
+        - setWeight: 60
+        - pause: { duration: 10 }
+        - setWeight: 80
+        - pause: { duration: 10 }
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: loadgenerator
+  template:
+    metadata:
+      labels:
+        app: loadgenerator
+      annotations:
+        sidecar.istio.io/rewriteAppHTTPProbers: "true"
+    spec:
+      serviceAccountName: default
+      terminationGracePeriodSeconds: 5
+      restartPolicy: Always
+      containers:
+      - name: main
+        image: gcr.io/google-samples/microservices-demo/loadgenerator:v0.2.2
+        env:
+        - name: FRONTEND_ADDR
+          value: "frontend:80"
+        - name: USERS
+          value: "10"
+        resources:
+          requests:
+            cpu: 300m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
