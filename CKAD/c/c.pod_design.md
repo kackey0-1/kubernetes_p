@@ -205,15 +205,42 @@ kubectl describe rs/<rs_name>
 kubectl delete deploy nginx
 kubectl api-resources
 kubectl delete horizontalpodautoscalers nginx
+kubectl delete hpa nginx
 ```
 
 # Jobs
 ## Create a job named pi with image perl that runs the command with arguments "perl -Mbignum=bpi -wle 'print bpi(2000)'"
+```bash
+kubectl create job pi --image=perl -- perl -Mbignum=bpi -wle 'print bpi(2000)'
+```
+
 ## Wait till it's done, get the output
+```bash
+kubectl get jobs -w
+```
 ## Create a job with the image busybox that executes the command 'echo hello;sleep 30;echo world'
+```bash
+kubectl create job busybox --image=busybox -- /bin/sh -c "echo hello;sleep 30;echo world"
+```
+
 ## Follow the logs for the pod (you'll wait for 30 seconds)
+```bash
+#kubectl get jobs -w
+kubectl get po 
+kubectl logs busybox-<hash-value>
+```
+
 ## See the status of the job, describe it and see the logs
+```bash
+kubectl describe job busybox
+```
+
 ## Delete the job
+```bash
+kubectl get jobs
+kubectl delete job busybox
+```
+
 ## Create a job but ensure that it will be automatically terminated by kubernetes if it takes more than 30 seconds to execute
 ## Create the same job, make it run 5 times, one after the other. Verify its status and delete it
 ## Create the same job, but make it run 5 parallel times
