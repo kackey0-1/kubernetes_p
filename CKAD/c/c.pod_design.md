@@ -242,10 +242,49 @@ kubectl delete job busybox
 ```
 
 ## Create a job but ensure that it will be automatically terminated by kubernetes if it takes more than 30 seconds to execute
+```bash
+kubectl create job busybox --image=busybox --dry-run=client -o yaml -- /bin/sh -c "while true; do echo hello; sleep 10; done" > job.yaml
+# vim job.yaml and add spec.activeDeadlineSeconds: 30 property
+kubectl apply -f job.yaml
+kubectl get job busybox -w
+```
 ## Create the same job, make it run 5 times, one after the other. Verify its status and delete it
+```bash
+kubectl create job busybox --image=busybox --dry-run=client -o yaml -- /bin/sh -c "echo hello; sleep 10; echo world" > job.yaml
+# vim job.yaml and add spec.completions: 5 property
+kubectl apploy -f job.yaml
+kubectl get job busybox -w
+kubectl delete job busybox
+```
 ## Create the same job, but make it run 5 parallel times
+```bash
+kubectl create job busybox --image=busybox --dry-run=client -o yaml -- /bin/sh -c "echo hello;sleep 10;echo world" > job_parallel.yaml
+# vim job.yaml and add parallelism: 5 property
+kubectl get job busybox -w
+kubectl delete job busybox
+```
 
 # Cron Job
 ## Create a cron job with image busybox that runs on a schedule of "*/1 * * * *" and writes 'date; echo Hello from the Kubernetes cluster' to standard output
+```bash
+kubectl create cronjob busybox --image=busybox --schedule="*/1 * * * *" --dry-run=client -o yaml -- /bin/sh -c "data; echo 'Hello from the Kubernetes cluster'"
+kubect get cj busybox
+kubectl describe cj busybox
+
+kubectl delete cj busybox
+```
+
 ## See its logs and delete it
+```bash
+kubectl ge po
+kubectl logs <pod_name>
+
+kubectl delete cj busybox
+```
 ## Create a cron job with image busybox that runs every minute and writes 'date; echo Hello from the Kubernetes cluster' to standard output. The cron job should be terminated if it takes more than 17 seconds to start execution after its schedule.
+```bash
+kubectl create cj busybox --image=busybox --schedule="*/1 * * * *" --dry-run=client -o yaml -- /bin/sh -c "date; echo 'Hello from Kubernetes cluster'" > cronjob_every_minute.yaml
+# vim cronjob_every_minute.yaml and add spec.jobTemplate.spec.activeDeadlineSeconds: 17
+kubectl apply -f cronjob_every_minute.yaml
+kubectl get cj busybox -w
+```
