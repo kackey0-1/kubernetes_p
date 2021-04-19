@@ -80,12 +80,49 @@ kubectl run nginx --image=nginx --requests='100m,memory=256Mi' --limits='200m,me
 
 ## Secrets
 ### Create a secret called mysecret with the values password=mypass
+```shell
+kubectl create secret mysecret generic --from-literal=password=mypass
+kubectl describe secret mysecret
+kubectl get secret mysecret -o yaml
+```
 ### Create a secret called mysecret2 that gets key/value from a file
+```shell
+echo -e 'key=value\nhoge=fuga'
+kubectl create secret generic mysecret2 --from-file=secret.txt
+kubectl get secret -o yaml
+# echo '' | base64 -d
+```
 ### Get the value of mysecret2
+```shell
+kubectl get secret mysecret2 -o yaml
+kubectl get secret mysecret2 -o yaml | grep secret.txt | awk '{print $2}' | base64 -d
+```
 ### Create an nginx pod that mounts the secret mysecret2 in a volume on path /etc/foo
+```shell
+kubectl run nginx --image=nginx --dry-run=client -o yaml > nginx-secret.yaml
+kubectl create -f nginx-secret.yaml
+kubectl exec -it pod/nginx -- /bin/bash
+```
 ### Delete the pod you just created and mount the variable 'username' from secret mysecret2 onto a new nginx pod in env variable called 'USERNAME'
-
+```shell
+kubectl run nginx --image=nginx --dry-run=client -o yaml > nginx-env-secret.yaml
+kubectl create -f secret.yaml
+kubectl create -f nginx-env-secret.yaml
+kubectl exec -it pod/nginx -- /bin/bash
+```
 ## ServiceAccounts
 ### See all the service accounts of the cluster in all namespaces
+```shell
+kubectl get serviceaccounts -A
+kubectl get sa -A
+```
 ### Create a new serviceaccount called 'myuser'
+```shell
+kubectl create sa myuser
+kubectl describe sa myuser
+```
 ### Create an nginx pod that uses 'myuser' as a service account
+```shell
+kubectl run nginx --image=nginx --dry-run=client -o yaml > nginx-accountservices.yaml
+kubectl create -f nginx-accountservices.yaml
+```
