@@ -60,10 +60,23 @@ echo $var9
 ```
 ## SecurityContext
 ### Create the YAML for an nginx pod that runs with the user ID 101. No need to create the pod
+```shell
+kubectl run nginx --image=nginx --dry-run=client -o yaml > nginx-userid.yaml
+# vim nginx-userid.yaml and add spec.securityContext.runAsUser: 101
+# kubectl create -f nginx-userid.yaml
+```
 ### Create the YAML for an nginx pod that has the capabilities "NET_ADMIN", "SYS_TIME" added on its single container
-
+```shell
+kubectl run nginx --image=nginx --dry-run=client -o yaml > nginx-capabilities.yaml
+# vim nginx-capabilities.yaml and add capabilities properties
+# or
+```
 ## Requests and limits
 ### Create an nginx pod with requests cpu=100m,memory=256Mi and limits cpu=200m,memory=512Mi
+```shell
+kubectl run nginx --image=nginx --requests='cpu=100m,memory=256Mi' --limits='cpu=200m,memory=512Mi'
+kubectl run nginx --image=nginx --requests='100m,memory=256Mi' --limits='200m,memory=512Mi'
+```
 
 ## Secrets
 ### Create a secret called mysecret with the values password=mypass
