@@ -23,5 +23,5 @@ minikube start --cpus=4 --memory 4096 --disk-size 32g
 ## deploy kubernetes cluster
 ```bash
 kubectl apply -k example/
-kubectl get pod,ro,svc,ing -o=wide
+kubectl get pod,rs,ro,svc,ing -o=wide
 ```
