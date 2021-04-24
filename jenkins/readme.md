@@ -21,6 +21,7 @@ kubectl create -f jenkins-volume.yaml
 ```shell
 chart=jenkinsci/jenkins
 helm install jenkins -n jenkins -f resources/jenkins-values.yaml $chart
+
 ```
 
 after execution
@@ -49,4 +50,9 @@ https://jenkins.io/projects/jcasc/
 
 
 NOTE: Consider using a custom image with pre-installed plugins
+```
+
+### uninstall jenkins
+```shell
+helm uninstall jenkins -n jenkins
 ```
