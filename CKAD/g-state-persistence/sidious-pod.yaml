@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: sidious
+  name: sidious
+spec:
+  containers:
+  - image: mysql
+    name: sidious
+    resources: {}
+    volumeMounts:
+    - name: sidious-vol
+      mountPath: /var/lib/mysql
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: my-secret-pw
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+  - name: sidious-vol
+    persistentVolumeClaim:
+      claimName: sidious-pvc
+status: {}
+---
