@@ -39,7 +39,7 @@ eksctl create cluster \
     --nodes-min 1 \
     --nodes-max 2 \
     --ssh-access \
-    --ssh-public-key ~/.ssh/id_rsa.2020-11-05.pub \
+    --ssh-public-cert ~/.ssh/id_rsa.2020-11-05.pub \
     --managed
 
 # Describe EKS Cluster 

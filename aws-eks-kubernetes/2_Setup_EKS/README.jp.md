@@ -136,7 +136,7 @@ eksctl create cluster \
     --nodes-min 1 \
     --nodes-max 4 \
     --ssh-access \
-    --ssh-public-key ~/.ssh/eks_worker_nodes_demo.pem.pub \
+    --ssh-public-cert ~/.ssh/eks_worker_nodes_demo.pem.pub \
     --managed
 ```
 
@@ -148,7 +148,7 @@ eksctl create cluster \
 [ℹ]  subnets for us-west-2b - public:192.168.0.0/19 private:192.168.96.0/19
 [ℹ]  subnets for us-west-2a - public:192.168.32.0/19 private:192.168.128.0/19
 [ℹ]  subnets for us-west-2c - public:192.168.64.0/19 private:192.168.160.0/19
-[ℹ]  using SSH public key "/Users/USERNAME/.ssh/eks_worker_nodes_demo.pem.pub" as "eksctl-eks-from-eksctl-nodegroup-workers-51:34:9d:9e:0f:87:a5:dc:0c:9f:b9:0c:29:5a:0b:51" 
+[ℹ]  using SSH public cert "/Users/USERNAME/.ssh/eks_worker_nodes_demo.pem.pub" as "eksctl-eks-from-eksctl-nodegroup-workers-51:34:9d:9e:0f:87:a5:dc:0c:9f:b9:0c:29:5a:0b:51" 
 [ℹ]  using Kubernetes version 1.16
 [ℹ]  creating EKS cluster "eks-from-eksctl" in "us-west-2" region with managed nodes
 [ℹ]  will create 2 separate CloudFormation stacks for cluster itself and the initial managed nodegroup
