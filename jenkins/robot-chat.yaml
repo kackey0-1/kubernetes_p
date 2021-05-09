@@ -1,0 +1,88 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data1
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo
+        args:
+        - --smallfiles
+        volumeMounts:
+        - name: vol
+          mountPath: /data/db
+      volumes:
+      - name: vol
+        persistentVolumeClaim:
+          claimName: data1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  type: ClusterIP
+  selector:
+    app: db
+  ports:
+  - protocol: TCP
+    port: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rocket
+spec:
+  selector:
+    app: rocket
+  ports:
+  - protocol: TCP
+    port: 3000
+    nodePort: 31000
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rocket
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocket
+  template:
+    metadata:
+      labels:
+        app: rocket
+    spec:
+      containers:
+      - name: rocket
+        image: rocket.chat
+        env:
+        - name: ROOT_URL
+          value: http://localhost:31000/
+
+
