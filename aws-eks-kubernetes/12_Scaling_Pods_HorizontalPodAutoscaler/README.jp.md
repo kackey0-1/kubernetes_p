@@ -23,7 +23,7 @@ kubectl top pods
 $ kubectl logs metrics-server-5fb44bc684-8xdjq -n kube-system
 
 # アウトプット
-I0519 10:04:00.168107       1 serving.go:312] Generated self-signed cert (/tmp/apiserver.crt, /tmp/apiserver.key)
+I0519 10:04:00.168107       1 serving.go:312] Generated self-signed cert (/tmp/apiserver.crt, /tmp/apiserver.cert)
 I0519 10:04:00.844946       1 secure_serving.go:116] Serving securely on [::]:8443
 E0519 10:04:40.993273       1 reststorage.go:160] unable to fetch pod metrics for pod default/eks-demo-74954f798-cnnvb: no metrics known for pod
 E0519 10:04:56.005862       1 reststorage.go:160] unable to fetch pod metrics for pod default/eks-demo-74954f798-cnnvb: no metrics known for pod

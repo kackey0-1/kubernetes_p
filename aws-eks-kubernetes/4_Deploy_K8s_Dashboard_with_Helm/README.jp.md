@@ -33,7 +33,7 @@ serviceaccount/kubernetes-dashboard created
 service/kubernetes-dashboard created
 secret/kubernetes-dashboard-certs created
 secret/kubernetes-dashboard-csrf created
-secret/kubernetes-dashboard-key-holder created
+secret/kubernetes-dashboard-cert-holder created
 configmap/kubernetes-dashboard-settings created
 role.rbac.authorization.k8s.io/kubernetes-dashboard created
 clusterrole.rbac.authorization.k8s.io/kubernetes-dashboard created

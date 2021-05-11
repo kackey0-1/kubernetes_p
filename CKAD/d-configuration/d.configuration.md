@@ -443,7 +443,7 @@ spec:
       valueFrom:
         secretKeyRef: # secret reference
           name: mysecret2 # our secret's name
-          key: username # the key of the data in the secret
+          key: username # the cert of the data in the secret
   dnsPolicy: ClusterFirst
   restartPolicy: Never
 status: {}

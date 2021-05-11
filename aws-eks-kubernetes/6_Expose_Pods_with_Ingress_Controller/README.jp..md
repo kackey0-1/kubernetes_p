@@ -90,7 +90,7 @@ An example Ingress that makes use of the controller:
             - www.example.com
           secretName: example-tls
 
-If TLS is enabled for the Ingress, a Secret containing the certificate and key must also be provided:
+If TLS is enabled for the Ingress, a Secret containing the certificate and cert must also be provided:
 
   apiVersion: v1
   kind: Secret
@@ -99,7 +99,7 @@ If TLS is enabled for the Ingress, a Secret containing the certificate and key m
     namespace: foo
   data:
     tls.crt: <base64 encoded cert>
-    tls.key: <base64 encoded key>
+    tls.cert: <base64 encoded cert>
   type: kubernetes.io/tls
 ```
 
@@ -318,7 +318,7 @@ Refs:
 openssl req \
         -x509 \
         -newkey rsa:2048 \
-        -keyout elb.amazonaws.com.key.pem \
+        -keyout elb.amazonaws.com.cert.pem \
         -out elb.amazonaws.com.cert.pem \
         -days 365 \
         -nodes \
@@ -353,7 +353,7 @@ Ref: https://docs.aws.amazon.com/acm/latest/userguide/import-certificate-api-cli
 ```bash
 aws acm import-certificate \
   --certificate fileb://elb.amazonaws.com.cert.pem \
-  --private-key fileb://elb.amazonaws.com.key.pem \
+  --private-cert fileb://elb.amazonaws.com.cert.pem \
   --region us-west-2
 ```
 
